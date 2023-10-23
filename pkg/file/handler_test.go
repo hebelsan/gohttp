@@ -12,17 +12,46 @@ import (
 	"testing"
 )
 
-func TestGetReadMe(t *testing.T) {
-	req, err := http.NewRequest("GET", "/middleware.go", nil)
+func TestGetAll(t *testing.T) {
+	// Get the current directory
+	currentDir, err := os.Getwd()
 	if err != nil {
-		t.Fatal(err)
+		fmt.Println("Error:", err)
+		return
 	}
-	rr := httptest.NewRecorder()
-	Handler(rr, req)
-	expectedStatus := http.StatusOK
-	if status := rr.Code; status != expectedStatus {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, expectedStatus)
+
+	// Open the current directory
+	dir, err := os.Open(currentDir)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	defer dir.Close()
+
+	// Read the directory entries
+	entries, err := dir.Readdir(0)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// Iterate through the directory entries
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		} else {
+			req, err := http.NewRequest("GET", "/"+entry.Name(), nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			rr := httptest.NewRecorder()
+			Handler(rr, req)
+			expectedStatus := http.StatusOK
+			if status := rr.Code; status != expectedStatus {
+				t.Errorf("handler returned wrong status code: got %v want %v",
+					status, expectedStatus)
+			}
+		}
 	}
 }
 
