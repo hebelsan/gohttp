@@ -11,7 +11,7 @@ import (
 func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		fs := http.FileServer(http.Dir("./static"))
+		fs := http.FileServer(http.Dir("./"))
 		fs.ServeHTTP(w, r)
 	case http.MethodPost:
 		if isMultipart(r) {
