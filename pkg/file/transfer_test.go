@@ -1,4 +1,4 @@
-package middleware
+package file
 
 import (
 	"bytes"
@@ -43,7 +43,7 @@ func TestMultiPart(t *testing.T) {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	rr := httptest.NewRecorder()
-	FileHandler{}.ServeHTTP(rr, req)
+	Handler(rr, req)
 
 	expectedStatus := http.StatusOK
 	if status := rr.Code; status != expectedStatus {
@@ -69,7 +69,7 @@ func TestRawUpload(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	FileHandler{}.ServeHTTP(rr, req)
+	Handler(rr, req)
 
 	expectedStatus := http.StatusOK
 	if status := rr.Code; status != expectedStatus {
@@ -90,7 +90,7 @@ func TestRawNoFileNameHeader(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	FileHandler{}.ServeHTTP(rr, req)
+	Handler(rr, req)
 	// we expect to fail if filename header is missing
 	expectedStatus := http.StatusBadRequest
 	if status := rr.Code; status != expectedStatus {
@@ -106,7 +106,7 @@ func TestUnsupportedMethod(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	FileHandler{}.ServeHTTP(rr, req)
+	Handler(rr, req)
 
 	expectedStatus := http.StatusMethodNotAllowed
 	if rr.Code != expectedStatus {
