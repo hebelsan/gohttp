@@ -12,7 +12,35 @@ import (
 	"testing"
 )
 
-func TestMultiPart(t *testing.T) {
+func TestGetReadMe(t *testing.T) {
+	req, err := http.NewRequest("GET", "/middleware.go", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	Handler(rr, req)
+	expectedStatus := http.StatusOK
+	if status := rr.Code; status != expectedStatus {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, expectedStatus)
+	}
+}
+
+func TestGetFileNotFound(t *testing.T) {
+	req, err := http.NewRequest("GET", "/test.txt", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	Handler(rr, req)
+	expectedStatus := http.StatusNotFound
+	if status := rr.Code; status != expectedStatus {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, expectedStatus)
+	}
+}
+
+func TestPostMultiPart(t *testing.T) {
 	fileName := "test_multi.txt"
 	fileContent := "test multipart upload"
 
@@ -57,7 +85,7 @@ func TestMultiPart(t *testing.T) {
 	}
 }
 
-func TestRawUpload(t *testing.T) {
+func TestPostRawUpload(t *testing.T) {
 	fileName := "test_raw.txt"
 	fileContent := "test raw upload"
 	body := strings.NewReader(fileContent)
@@ -83,7 +111,7 @@ func TestRawUpload(t *testing.T) {
 	}
 }
 
-func TestRawNoFileNameHeader(t *testing.T) {
+func TestPostRawNoFileNameHeader(t *testing.T) {
 	body := strings.NewReader("test upload")
 	req, err := http.NewRequest("POST", "/", body)
 	if err != nil {

