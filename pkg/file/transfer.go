@@ -1,4 +1,4 @@
-package middleware
+package file
 
 import (
 	"fmt"
@@ -8,9 +8,7 @@ import (
 	"strings"
 )
 
-type FileHandler struct{}
-
-func (h FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		fs := http.FileServer(http.Dir("./static"))
@@ -21,13 +19,10 @@ func (h FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		} else {
 			handleRaw(w, r)
 		}
+		_, _ = w.Write([]byte("upload successful\n"))
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
-}
-
-func isMultipart(r *http.Request) bool {
-	return strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data")
 }
 
 func handleMultipart(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +61,9 @@ func handleMultipart(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+}
+func isMultipart(r *http.Request) bool {
+	return strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data")
 }
 
 func handleRaw(w http.ResponseWriter, r *http.Request) {
