@@ -16,9 +16,10 @@ func (h FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		fs := http.FileServer(http.Dir("./static"))
 		fs.ServeHTTP(w, r)
 	case http.MethodPost:
-		fmt.Println(r.Header.Get("Content-Type"))
 		if isMultipart(r) {
 			handleMultipart(w, r)
+		} else {
+			handleRaw(w, r)
 		}
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -65,7 +66,26 @@ func handleMultipart(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+}
 
-	// Respond to the client with a success message.
-	_, _ = w.Write([]byte("File uploaded successfully!\n"))
+func handleRaw(w http.ResponseWriter, r *http.Request) {
+	filename := r.Header.Get("filename")
+	if filename == "" {
+		http.Error(w, "filename header not found", http.StatusBadRequest)
+		return
+	}
+	// Create a new file on the server to save the uploaded content.
+	dst, err := os.Create(filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	// Copy the file content to the destination file.
+	_, err = io.Copy(dst, r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
