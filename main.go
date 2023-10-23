@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"gohttp/pkg/middleware"
-	"gohttp/pkg/util"
+	"github.com/hebelsan/gohttp/pkg/middleware"
+	"github.com/hebelsan/gohttp/pkg/util"
 )
 
 func main() {
