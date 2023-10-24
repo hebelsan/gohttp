@@ -7,6 +7,7 @@ Therefore I wrote **gohttp** which supports both uploading and downloading files
 
 ## Installation
 ### go install
+First Make sure that `${GOPATH}/bin` is in your `$PATH`, then:
 ```bash
 go install github.com/hebelsan/gohttp@latest
 ./gohttp
