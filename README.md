@@ -10,7 +10,7 @@ go install github.com/hebelsan/gohttp
 ```
 ### docker
 ```bash
-docker pull TODO
+docker pull ghcr.io/hebelsan/gohttp:latest
 docker run --rm -v $(pwd):/mount -p 80:80 gohttp
 ```
 ### manual
