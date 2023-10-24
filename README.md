@@ -1,5 +1,5 @@
 # gohttp
-![build](https://github.com/hebelsan/gohttp/actions/workflows/build.yml/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/hebelsan/gohttp)](https://goreportcard.com/report/github.com/hebelsan/gohttp)
+[![Go Reference](https://pkg.go.dev/badge/github.com/hebelsan/gohttp.svg)](https://pkg.go.dev/github.com/hebelsan/gohttp) ![build](https://github.com/hebelsan/gohttp/actions/workflows/build.yml/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/hebelsan/gohttp)](https://goreportcard.com/report/github.com/hebelsan/gohttp)
 
 
 While playing on hackthebox.com I was missing the capability to upload files from the victims machines back to my machine with Python SimpleHTTPServer.  
