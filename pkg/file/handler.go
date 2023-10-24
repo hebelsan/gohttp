@@ -5,27 +5,32 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	filesPath, err := getFilesRoot()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	switch r.Method {
 	case http.MethodGet:
-		fs := http.FileServer(http.Dir("./"))
+		fs := http.FileServer(http.Dir(filesPath))
 		fs.ServeHTTP(w, r)
 	case http.MethodPost:
 		if isMultipart(r) {
-			handleMultipart(w, r)
+			handleMultipart(w, r, filesPath)
 		} else {
-			handleRaw(w, r)
+			handleRaw(w, r, filesPath)
 		}
-		_, _ = w.Write([]byte("upload successful\n"))
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
-func handleMultipart(w http.ResponseWriter, r *http.Request) {
+func handleMultipart(w http.ResponseWriter, r *http.Request, filesPath string) {
 	// Parse the form data, which may include uploaded files.
 	err := r.ParseMultipartForm(10 << 20) // Set a reasonable memory limit for the form fields
 	if err != nil {
@@ -46,7 +51,8 @@ func handleMultipart(w http.ResponseWriter, r *http.Request) {
 			defer file.Close()
 
 			// Create a new file on the server to save the uploaded content.
-			dst, err := os.Create(header.Filename)
+			filePath := filepath.Join(filesPath, header.Filename)
+			dst, err := os.Create(filePath)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -61,19 +67,18 @@ func handleMultipart(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-}
-func isMultipart(r *http.Request) bool {
-	return strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data")
+	_, _ = w.Write([]byte("upload successful\n"))
 }
 
-func handleRaw(w http.ResponseWriter, r *http.Request) {
+func handleRaw(w http.ResponseWriter, r *http.Request, filesPath string) {
 	filename := r.Header.Get("filename")
 	if filename == "" {
 		http.Error(w, "filename header not found", http.StatusBadRequest)
 		return
 	}
 	// Create a new file on the server to save the uploaded content.
-	dst, err := os.Create(filename)
+	filePath := filepath.Join(filesPath, filename)
+	dst, err := os.Create(filePath)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -86,4 +91,16 @@ func handleRaw(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	_, _ = w.Write([]byte("upload successful\n"))
+}
+
+func isMultipart(r *http.Request) bool {
+	return strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data")
+}
+
+func getFilesRoot() (string, error) {
+	if envPath := os.Getenv("FILES_ROOT"); envPath != "" {
+		return envPath, nil
+	}
+	return os.Getwd()
 }
