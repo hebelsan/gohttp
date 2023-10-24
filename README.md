@@ -1,9 +1,9 @@
 # gohttp
-![build](https://github.com/hebelsan/gohttp/actions/workflows/build.yml/badge.svg)  
-While playing on *hackthebox.com* I was missing the capability to upload files from the victims machines back to my machine with Python SimpleHTTPServer.  
-Therefore I wrote **gohttp** which supports both uploading and downloading files just by using the go standard library.
+![build](https://github.com/hebelsan/gohttp/actions/workflows/build.yml/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/hebelsan/gohttp)](https://goreportcard.com/report/github.com/hebelsan/gohttp)
 
-https://github.com/hebelsan/gohttp/actions/workflows/build.yml
+
+While playing on hackthebox.com I was missing the capability to upload files from the victims machines back to my machine with Python SimpleHTTPServer.  
+Therefore I wrote **gohttp** which supports both uploading and downloading files just by using the go standard library.
 
 ## Installation
 ### go install
