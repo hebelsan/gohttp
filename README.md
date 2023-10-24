@@ -8,7 +8,7 @@ https://github.com/hebelsan/gohttp/actions/workflows/build.yml
 ## Installation
 ### go install
 ```bash
-go install github.com/hebelsan/gohttp
+go install github.com/hebelsan/gohttp@latest
 ./gohttp
 ```
 ### docker
