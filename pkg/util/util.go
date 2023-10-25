@@ -1,3 +1,4 @@
+// Package util implements utility routines such as environment variables handling
 package util
 
 import (
@@ -6,6 +7,7 @@ import (
 	"os"
 )
 
+// GetPort retrieves the port from env or returns the default port
 func GetPort(defaultPort string) string {
 	if os.Getenv("PORT") != "" {
 		return ":" + os.Getenv("PORT")
@@ -13,6 +15,7 @@ func GetPort(defaultPort string) string {
 	return ":" + defaultPort
 }
 
+// PseudoUuid creates and returns a pseudo UUID by utilizing crypto/rand
 // Note - NOT RFC4122 compliant
 func PseudoUuid() (uuid string) {
 	b := make([]byte, 16)

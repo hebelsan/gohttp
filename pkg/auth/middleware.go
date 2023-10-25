@@ -1,3 +1,4 @@
+// Package auth contains all authentication checks and middleware
 package auth
 
 import (
@@ -19,6 +20,7 @@ func NewMiddleware() *middleware {
 	return m
 }
 
+// Handle verifies the auth header for each request
 func (m *middleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// check if api-key is correct

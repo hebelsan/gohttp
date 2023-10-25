@@ -1,3 +1,4 @@
+// Package file implements utility routines for uploading and downloading files.
 package file
 
 import (
@@ -9,6 +10,7 @@ import (
 	"strings"
 )
 
+// Handler serves files on GET and downloads files on POST requests
 func Handler(w http.ResponseWriter, r *http.Request) {
 	filesPath, err := getFilesRoot()
 	if err != nil {
