@@ -1,3 +1,4 @@
+// Package main starts the server to serve static files provide upload functionality
 package main
 
 import (
