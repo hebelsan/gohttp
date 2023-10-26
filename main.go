@@ -11,12 +11,8 @@ import (
 )
 
 func main() {
-	handler := file.Handler
-	if os.Getenv("AUTH") == "API-KEY" {
-		authMiddleware := auth.NewMiddleware()
-		handler = authMiddleware.Handle(file.Handler)
-	}
-	http.HandleFunc("/", handler)
+	authMiddleware := auth.NewMiddleware(os.Getenv(auth.ENV_KEY))
+	http.HandleFunc("/", authMiddleware.AuthHandler(file.Handler))
 	err := http.ListenAndServe(util.GetPort("80"), nil)
 	if err != nil {
 		panic(err)
