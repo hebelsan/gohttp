@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-var authMiddleware = NewMiddleware()
+var authMiddleware = NewMiddleware(TYPE_API_KEY)
 var nextHandler = func(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
-var authHandler = authMiddleware.Handle(nextHandler)
+var authHandler = authMiddleware.AuthHandler(nextHandler)
 
 func TestAuthenticated(t *testing.T) {
 	req, err := http.NewRequest("POST", "/", nil)
@@ -55,7 +55,7 @@ func TestMissingHeader(t *testing.T) {
 	rr := httptest.NewRecorder()
 	authHandler(rr, req)
 
-	expectedStatus := http.StatusBadRequest
+	expectedStatus := http.StatusUnauthorized
 	if rr.Code != expectedStatus {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			rr.Code, expectedStatus)
